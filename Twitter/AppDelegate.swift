@@ -41,9 +41,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             requestToken: requestTokenCredential,
             success: { (accessToken : BDBOAuth1Credential!) in
                 print("got access token successfully ... ")
+                let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"
+                twitterClient.GET(
+                    homeTimelineRelativeEndpoint,
+                    parameters: nil,
+                    progress: nil,
+                    success: { (request : NSURLSessionDataTask, response :AnyObject?) in
+                        let responseDictionaries = response as! [NSDictionary]
+                        for responseDictionary in responseDictionaries {
+                            print(responseDictionary["text"]!)
+                        }
+                    },
+                    failure: { (request : NSURLSessionDataTask?, error : NSError) in
+                        print("error : \(error.localizedDescription)")
+                })
             }) { (error : NSError!) in
                 print("error : \(error.localizedDescription)")
             }
+        
         return true
     }
 
