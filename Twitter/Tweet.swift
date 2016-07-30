@@ -26,8 +26,9 @@ class Tweet: NSObject {
         tweetIdString = tweetDictionary["id_str"] as? String
         tweetText =  tweetDictionary["text"] as? String
         
+        //"Fri Jul 29 01:00:17 +0000 2016"
         let dateformatter = NSDateFormatter()
-        dateformatter.dateFormat = "Fri Jul 29 01:00:17 +0000 2016"
+        dateformatter.dateFormat = "EEE MMM dd HH:mm:ss Z yyyy"
         tweetCreatedDate = dateformatter.dateFromString(tweetDictionary["created_at"] as! String)
 
         isTweetTruncated = tweetDictionary["truncated"] as! Bool
