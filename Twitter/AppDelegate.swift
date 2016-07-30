@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BDBOAuth1Manager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        return true
+    }
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        print(url.description)
+        print(url.query)
+        let twitterBaseUrl = NSURL(string: "https://api.twitter.com")
+        let twitterAppConsumerKey = "BVwcFZuRapp7oF0uL1WPkMIGi"
+        let twitterAppConsumerSecret = "XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
+
+        
+        let twitterClient = BDBOAuth1SessionManager(
+                    baseURL: twitterBaseUrl,
+            consumerKey: twitterAppConsumerKey,
+            consumerSecret: twitterAppConsumerSecret)
+
+        let accessTokenRelativePath = "oauth/access_token"
+        let requestTokenCredential = BDBOAuth1Credential(queryString: url.query)
+        twitterClient.fetchAccessTokenWithPath(
+            accessTokenRelativePath,
+            method: "POST",
+            requestToken: requestTokenCredential,
+            success: { (accessToken : BDBOAuth1Credential!) in
+                print("got access token successfully ... ")
+            }) { (error : NSError!) in
+                print("error : \(error.localizedDescription)")
+            }
         return true
     }
 
