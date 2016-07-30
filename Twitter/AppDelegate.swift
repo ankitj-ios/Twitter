@@ -23,42 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
         print(url.description)
         print(url.query)
-        let twitterBaseUrl = NSURL(string: "https://api.twitter.com")
-        let twitterAppConsumerKey = "BVwcFZuRapp7oF0uL1WPkMIGi"
-        let twitterAppConsumerSecret = "XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
-
-        
-        let twitterClient = BDBOAuth1SessionManager(
-                    baseURL: twitterBaseUrl,
-            consumerKey: twitterAppConsumerKey,
-            consumerSecret: twitterAppConsumerSecret)
-
-        let accessTokenRelativePath = "oauth/access_token"
-        let requestTokenCredential = BDBOAuth1Credential(queryString: url.query)
-        twitterClient.fetchAccessTokenWithPath(
-            accessTokenRelativePath,
-            method: "POST",
-            requestToken: requestTokenCredential,
-            success: { (accessToken : BDBOAuth1Credential!) in
-                print("got access token successfully ... ")
-                let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"
-                twitterClient.GET(
-                    homeTimelineRelativeEndpoint,
-                    parameters: nil,
-                    progress: nil,
-                    success: { (request : NSURLSessionDataTask, response :AnyObject?) in
-                        let responseDictionaries = response as! [NSDictionary]
-                        for responseDictionary in responseDictionaries {
-                            print(responseDictionary["text"]!)
-                        }
-                    },
-                    failure: { (request : NSURLSessionDataTask?, error : NSError) in
-                        print("error : \(error.localizedDescription)")
-                })
-            }) { (error : NSError!) in
-                print("error : \(error.localizedDescription)")
-            }
-        
+        TwitterClient.sharedInstance.handleOpenUrl(url)
         return true
     }
 
