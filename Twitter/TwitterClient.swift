@@ -10,8 +10,8 @@ import UIKit
 import BDBOAuth1Manager
 
 let twitterBaseUrl = NSURL(string: "https://api.twitter.com")
-let twitterAppConsumerKey = "BVwcFZuRapp7oF0uL1WPkMIGi"
-let twitterAppConsumerSecret = "XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
+let twitterAppConsumerKey = "eNLJh17khyH9BViZi3HZVt3zX" //"BVwcFZuRapp7oF0uL1WPkMIGi"
+let twitterAppConsumerSecret = "r39wiGsY8COnseBYfpi7MBfaDyAAO4Iqy9YAh69SXe8b3JruNQ" //"XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
 
 class TwitterClient: BDBOAuth1SessionManager {
 
@@ -99,6 +99,21 @@ class TwitterClient: BDBOAuth1SessionManager {
 
     }
     
+    func postTweet(tweet : String) {
+        let twitterClient = TwitterClient.sharedInstance
+        let tweetPostRelativeEndpoint = "1.1/statuses/update.json"
+        var requestParameters : [String : String] = [:]
+        requestParameters["status"] = tweet
+        twitterClient.POST(tweetPostRelativeEndpoint,
+                parameters: requestParameters,
+                progress: nil,
+                success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                    print("successfully posted tweet ... \(tweet)")
+                })
+                { (request : NSURLSessionDataTask?, error : NSError) in
+                    print("[ERROR] \(error)")
+                }
+    }
     
     func fetchHomeTimeline(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> ()) {
         let twitterClient = TwitterClient.sharedInstance
