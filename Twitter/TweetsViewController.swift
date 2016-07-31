@@ -53,5 +53,18 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
     
     func populateTweetCell(cell : TweetCell, tweet : Tweet) -> Void {
         cell.tweetTextLabel.text = tweet.tweetText
+        cell.retweetCountLabel.text = String(tweet.retweetCount!)
+        cell.favoriteCountLabel.text = String(tweet.favouriteCount!)
+        cell.userName.text = tweet.tweetUser?.userName
+        cell.userScreenName.text = tweet.tweetUser?.userScreenName
+        cell.createdAtLabel.text = "1/01/0001"
+        if let userProfileImageUrl = tweet.tweetUser?.profileImageUrl {
+            let userProfileImageRequest = NSURLRequest(URL: userProfileImageUrl)
+            cell.userImageView.setImageWithURLRequest(userProfileImageRequest, placeholderImage: nil, success: { (userProfileImageRequest, userProfileImageResponse, userProfileImage) in
+                cell.userImageView.image = userProfileImage
+            }) { (userProfileImageRequest, userProfileImageResponse, error) in
+                print(error)
+            }
+        }
     }
 }

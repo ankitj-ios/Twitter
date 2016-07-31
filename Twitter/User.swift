@@ -34,7 +34,7 @@ class User: NSObject {
         userDescription = dictionary["description"] as? String
         followersCount = dictionary["followers_count"] as? Int ?? 0
         friendsCount = dictionary["friends_count"] as? Int ?? 0
-        profileImageUrl = NSURL(string: dictionary["profile_image_url"] as! String)
+        profileImageUrl = NSURL(string: dictionary["profile_image_url_https"] as! String)
     }
     
     
