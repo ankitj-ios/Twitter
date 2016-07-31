@@ -6,8 +6,16 @@
 //  Copyright © 2016 Ankit Jasuja. All rights reserved.
 //
 
-import Cocoa
+import UIKit
 
 class TweetDetailsViewController: UIViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
 }
+
