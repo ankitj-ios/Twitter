@@ -10,6 +10,9 @@ import UIKit
 
 class TweetsViewController: UIViewController {
 
+    var count = 20
+    var isMoreDataLoading = false
+    
     @IBOutlet weak var tweetsTableView: UITableView!
     
     @IBAction func onLogoutButton(sender: AnyObject) {
@@ -48,7 +51,6 @@ class TweetsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 }
 
 extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
@@ -77,6 +79,30 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
                 cell.userImageView.image = userProfileImage
             }) { (userProfileImageRequest, userProfileImageResponse, error) in
                 print(error)
+            }
+        }
+    }
+}
+
+extension TweetsViewController : UIScrollViewDelegate {
+
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            let scrollViewContentHeight = tweetsTableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tweetsTableView.bounds.size.height
+            var parameters : [String : String] = [:]
+            parameters["count"] = String(count)
+            if(scrollView.contentOffset.y >= scrollOffsetThreshold && tweetsTableView.dragging) {
+                isMoreDataLoading = true
+                TwitterClient.sharedInstance.fetchHomeTimelineWithParams({ (tweets) in
+                    self.tweets = tweets
+                    self.tweetsTableView.reloadData()
+                    self.isMoreDataLoading = false
+                    self.count += 20
+                    }, failure: { (error) in
+                        self.isMoreDataLoading = false
+                        print("Error  : \(error.localizedDescription)")
+                    }, parameters: parameters)
             }
         }
     }

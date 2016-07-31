@@ -115,6 +115,24 @@ class TwitterClient: BDBOAuth1SessionManager {
                 }
     }
     
+    func fetchHomeTimelineWithParams(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> (), parameters : [String : String]) {
+        let twitterClient = TwitterClient.sharedInstance
+        let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"
+        twitterClient.GET(
+            homeTimelineRelativeEndpoint,
+            parameters: parameters,
+            progress: nil,
+            success: { (request : NSURLSessionDataTask, response :AnyObject?) in
+                let tweetDictionaries = response as! [NSDictionary]
+                let tweets = Tweet.toTweets(tweetDictionaries)
+                success(tweets: tweets)
+            },
+            failure: { (request : NSURLSessionDataTask?, error : NSError) in
+                print("fetch home timeline with params failed ... ")
+                print("request\(request!.debugDescription), error : \(error.localizedDescription)")
+        })
+    }
+
     func fetchHomeTimeline(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> ()) {
         let twitterClient = TwitterClient.sharedInstance
         let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"
@@ -126,14 +144,10 @@ class TwitterClient: BDBOAuth1SessionManager {
                 let tweetDictionaries = response as! [NSDictionary]
                 let tweets = Tweet.toTweets(tweetDictionaries)
                 success(tweets: tweets)
-//                success(tweets: tweets)
-//                for tweetDictionary in tweetDictionaries {
-//                    let tweet = Tweet(tweetDictionary : tweetDictionary);
-//                    success(tweets: tweets)
-//                }
             },
             failure: { (request : NSURLSessionDataTask?, error : NSError) in
-                print("error : \(error.localizedDescription)")
+                print("fetch home timeline failed ... ")
+                print("request\(request?.description), error : \(error.localizedDescription)")
         })
     }
     
