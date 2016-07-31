@@ -17,6 +17,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        if User.currentUser != nil {
+            //save the user
+            print("There is a current user")
+            let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let tweetsNavigationController = mainStoryBoard.instantiateViewControllerWithIdentifier("TweetsNavigationController")
+            // to set a view controller as initial view controller programmatically
+            window?.rootViewController = tweetsNavigationController
+        } else {
+            print("There is no current user")
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserverForName("UserLogout", object: nil, queue: NSOperationQueue.mainQueue()) { (notification : NSNotification) in
+            let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let initialViewController = mainStoryBoard.instantiateInitialViewController()
+            self.window?.rootViewController = initialViewController
+        }
         return true
     }
     

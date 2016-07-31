@@ -60,6 +60,12 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
+    func logout() -> Void {
+        User.currentUser = nil
+        super.deauthorize()
+        NSNotificationCenter.defaultCenter().postNotificationName("UserLogout", object: nil)
+        
+    }
     func handleOpenUrl(url : NSURL) -> Void {
 //        let twitterBaseUrl = NSURL(string: "https://api.twitter.com")
 //        let twitterAppConsumerKey = "BVwcFZuRapp7oF0uL1WPkMIGi"
@@ -80,9 +86,10 @@ class TwitterClient: BDBOAuth1SessionManager {
             success: { (accessToken : BDBOAuth1Credential!) in
                 print("got access token successfully ... ")
                 self.fetchCurrentUser({ (user : User) in
-                self.loginSuccess?(user: user)
-            },
-            failure: { (error : NSError) in
+                    User.currentUser = user // Calls setter method
+                    self.loginSuccess?(user: user)
+                },
+                failure: { (error : NSError) in
                     self.loginFailure?(error: error)
                 })
         }) { (error : NSError!) in

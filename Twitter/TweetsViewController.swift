@@ -12,6 +12,10 @@ class TweetsViewController: UIViewController {
 
     @IBOutlet weak var tweetsTableView: UITableView!
     
+    @IBAction func onLogoutButton(sender: AnyObject) {
+        TwitterClient.sharedInstance.logout()
+    }
+    
     var tweets : [Tweet] = []
     
     override func viewDidLoad() {
