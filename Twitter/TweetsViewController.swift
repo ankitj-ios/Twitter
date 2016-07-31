@@ -20,6 +20,9 @@ class TweetsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        self.tweetsTableView.insertSubview(refreshControl, atIndex: 0)
         tweetsTableView.dataSource = self
         tweetsTableView.delegate = self
         // Do any additional setup after loading the view, typically from a nib.
@@ -27,6 +30,16 @@ class TweetsViewController: UIViewController {
             self.tweets = tweets
             self.tweetsTableView.reloadData()
             }) { (error) in
+            print("Error  : \(error.localizedDescription)")
+        }
+    }
+    
+    func refreshControlAction(refreshControl : UIRefreshControl) {
+        TwitterClient.sharedInstance.fetchHomeTimeline({ (tweets) in
+            self.tweets = tweets
+            self.tweetsTableView.reloadData()
+            refreshControl.endRefreshing()
+        }) { (error) in
             print("Error  : \(error.localizedDescription)")
         }
     }
