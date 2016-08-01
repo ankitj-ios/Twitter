@@ -29,14 +29,23 @@ class Tweet: NSObject {
         //"Fri Jul 29 01:00:17 +0000 2016"
         let dateformatter = NSDateFormatter()
         dateformatter.dateFormat = "EEE MMM dd HH:mm:ss Z yyyy"
-        tweetCreatedDate = dateformatter.dateFromString(tweetDictionary["created_at"] as! String)
+        
+        if let createdAtString = tweetDictionary["created_at"] as? String {
+            tweetCreatedDate = dateformatter.dateFromString(createdAtString)
+        } else {
+            tweetCreatedDate = NSDate()
+        }
 
-        isTweetTruncated = tweetDictionary["truncated"] as! Bool
-        tweetUser = User(dictionary: tweetDictionary["user"] as! NSDictionary)
-        retweetCount = tweetDictionary["retweet_count"] as? Int
-        favouriteCount = tweetDictionary["favorite_count"] as? Int
-        isRetweeted = tweetDictionary["retweeted"] as! Bool
-        isFavorited = tweetDictionary["favorited"] as! Bool
+        isTweetTruncated = tweetDictionary["truncated"] as? Bool ?? false
+        if let userDictionary = tweetDictionary["user"] as? NSDictionary {
+            tweetUser = User(dictionary: userDictionary)
+        } else {
+            tweetUser = User.currentUser
+        }
+        retweetCount = tweetDictionary["retweet_count"] as? Int ?? 0
+        favouriteCount = tweetDictionary["favorite_count"] as? Int ?? 0
+        isRetweeted = tweetDictionary["retweeted"] as? Bool ?? false
+        isFavorited = tweetDictionary["favorited"] as? Bool ?? false
     }
     
     class func toTweets(tweetDictionaries : [NSDictionary]) -> [Tweet] {

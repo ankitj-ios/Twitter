@@ -35,6 +35,13 @@ class ComposeViewController: UIViewController {
         } else {
             TwitterClient.sharedInstance.postTweet(tweetText)
         }
+        self.dismissViewControllerAnimated(true, completion: nil)
+        /* post notification to update table view */
+        print("tweet button tapped ... ")
+        var userInfo : [String : AnyObject] = [:]
+        userInfo["tweetText"] = tweetText
+        print("tweet button notification sent ... ")
+        NSNotificationCenter.defaultCenter().postNotificationName("TweetButtonTapped", object: nil, userInfo: userInfo)
     }
     
     @IBAction func onCancelButtonTap(sender:AnyObject) {

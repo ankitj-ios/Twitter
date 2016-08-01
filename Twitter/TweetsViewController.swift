@@ -43,6 +43,19 @@ class TweetsViewController: UIViewController {
             name: "ReplyButtonTapped", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleRetweetNotification), name: "RetweetButtonTapped", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleFavoriteNotification), name: "FavoriteButtonTapped", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleTweetNotification),
+            name: "TweetButtonTapped", object: nil)
+    }
+    
+    func handleTweetNotification(notification : NSNotification) {
+        print("have to update table view with latest cell at index = 0")
+        let userInfo : [NSObject : AnyObject] = notification.userInfo!
+        let tweetString = userInfo["tweetText"] as? String
+        var tweetDictionary : [String : String] = [:]
+        tweetDictionary["text"] = tweetString
+        let tweet = Tweet(tweetDictionary: tweetDictionary as NSDictionary)
+        self.tweets.insert(tweet, atIndex: 0)
+        self.tweetsTableView.reloadData()
     }
     
     func handleReplyNotification(notification : NSNotification) {
@@ -66,6 +79,12 @@ class TweetsViewController: UIViewController {
                 composeViewController.tweet = tweet
                 composeViewController.isPlaceHolderPresent = false
                 print("in segue for tweet user ... \(tweet.tweetUser?.userScreenName)")
+            }
+            if segueIdentifier == "CellToDetailSegue" {
+                print("inside cell to detail segue ... ")
+                let detailsViewController = segue.destinationViewController as! TweetDetailsViewController
+                let cell = sender as! TweetCell
+                detailsViewController.tweet = cell.tweet!
             }
         }
     }
@@ -154,6 +173,10 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
     func getStringFromDate(date : NSDate) -> String {
         let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.ShortStyle
@@ -164,6 +187,7 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
     func populateTweetCell(cell : TweetCell, tweet : Tweet) -> Void {
         cell.tweet = tweet
         cell.tweetTextLabel.text = tweet.tweetText
+        cell.replyButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         cell.retweetCountLabel.text = String(tweet.retweetCount!)
         if tweet.isRetweeted {
             cell.retweetButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
