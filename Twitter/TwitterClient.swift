@@ -111,6 +111,23 @@ class TwitterClient: BDBOAuth1SessionManager {
                 }
     }
     
+    func postTweetForReply(tweet : String, parentTweetId : String) {
+        let twitterClient = TwitterClient.sharedInstance
+        let tweetPostRelativeEndpoint = "1.1/statuses/update.json"
+        var requestParameters : [String : String] = [:]
+        requestParameters["status"] = tweet
+        requestParameters["in_reply_to_status_id"] = parentTweetId
+        twitterClient.POST(tweetPostRelativeEndpoint,
+                           parameters: requestParameters,
+                           progress: nil,
+                           success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                            print("successfully posted tweet for reply ... \(tweet)")
+            })
+        { (request : NSURLSessionDataTask?, error : NSError) in
+            print("[ERROR] \(error)")
+        }
+    }
+    
     func fetchHomeTimelineWithParams(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> (), parameters : [String : String]) {
         let twitterClient = TwitterClient.sharedInstance
         let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"

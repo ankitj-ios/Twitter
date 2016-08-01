@@ -25,10 +25,16 @@ class ComposeViewController: UIViewController {
     @IBOutlet weak var tweetButton: UIButton!
     
     var isPlaceHolderPresent = true
+    var isReply = false
+    var tweet : Tweet?
     
     @IBAction func onTweetButtonTap(sender: AnyObject) {
         let tweetText = self.tweetTextView.text
-        TwitterClient.sharedInstance.postTweet(tweetText)
+        if isReply {
+            TwitterClient.sharedInstance.postTweetForReply(tweetText, parentTweetId: tweet!.tweetIdString!)
+        } else {
+            TwitterClient.sharedInstance.postTweet(tweetText)
+        }
     }
     
     @IBAction func onCancelButtonTap(sender:AnyObject) {
@@ -49,12 +55,17 @@ class ComposeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("isReply ... \(isReply)")
         tweetButton.enabled = false
         
         tweetTextView.delegate = self
-        
-        applyTextViewPlaceholderStyle(
-            self.tweetTextView, placeHolderText: placeHolderText)
+        if isReply {
+            if let tweet = self.tweet {
+                tweetTextView.text = "@\(tweet.tweetUser!.userScreenName!) "
+            }
+        } else {
+            applyTextViewPlaceholderStyle(self.tweetTextView, placeHolderText: placeHolderText)
+        }
         
         remainingCountLabel.text = "140"
         
@@ -68,7 +79,6 @@ class ComposeViewController: UIViewController {
         }
 
     }
-    
 }
 
 extension ComposeViewController : UITextViewDelegate {

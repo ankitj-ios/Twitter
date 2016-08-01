@@ -51,8 +51,25 @@ class TweetsViewController: UIViewController {
         let tweet = tweetCell?.tweet
         print(tweetCell?.tweetTextLabel.text)
         print(tweet?.tweetIdString ?? "")
+        print("retweet button notification received .... ")
+        self.performSegueWithIdentifier("ReplyToComposeSegue", sender: tweet)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        print("segue called ... ")
+        let segueIdentifier = segue.identifier
+        if let segueIdentifier = segueIdentifier {
+            if segueIdentifier == "ReplyToComposeSegue" {
+                let composeViewController = segue.destinationViewController as! ComposeViewController
+                composeViewController.isReply = true
+                let tweet = sender as! Tweet
+                composeViewController.tweet = tweet
+                composeViewController.isPlaceHolderPresent = false
+                print("in segue for tweet user ... \(tweet.tweetUser?.userScreenName)")
+            }
+        }
+    }
+
     func handleRetweetNotification(notification : NSNotification) {
         let userInfo : [NSObject : AnyObject] = notification.userInfo!
         let tweetCell = userInfo["tweetCell"] as? TweetCell
