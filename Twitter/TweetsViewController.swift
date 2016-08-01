@@ -154,6 +154,13 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func getStringFromDate(date : NSDate) -> String {
+        let dateformatter = NSDateFormatter()
+        dateformatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        dateformatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        return dateformatter.stringFromDate(date)
+    }
+    
     func populateTweetCell(cell : TweetCell, tweet : Tweet) -> Void {
         cell.tweet = tweet
         cell.tweetTextLabel.text = tweet.tweetText
@@ -170,8 +177,8 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
             cell.favoriteButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
         }
         cell.userName.text = tweet.tweetUser?.userName
-        cell.userScreenName.text = tweet.tweetUser?.userScreenName
-        cell.createdAtLabel.text = "1/01/0001"
+        cell.userScreenName.text = "@\(tweet.tweetUser!.userScreenName!)"
+        cell.createdAtLabel.text = getStringFromDate(tweet.tweetCreatedDate!)
         if let userProfileImageUrl = tweet.tweetUser?.profileImageUrl {
             let userProfileImageRequest = NSURLRequest(URL: userProfileImageUrl)
             cell.userImageView.setImageWithURLRequest(userProfileImageRequest, placeholderImage: nil, success: { (userProfileImageRequest, userProfileImageResponse, userProfileImage) in
