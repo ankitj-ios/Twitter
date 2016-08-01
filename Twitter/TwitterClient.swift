@@ -14,6 +14,7 @@ let twitterAppConsumerKey = "eNLJh17khyH9BViZi3HZVt3zX" //"BVwcFZuRapp7oF0uL1WPk
 let twitterAppConsumerSecret = "r39wiGsY8COnseBYfpi7MBfaDyAAO4Iqy9YAh69SXe8b3JruNQ" //"XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
 
 class TwitterClient: BDBOAuth1SessionManager {
+    
 
     class var sharedInstance: TwitterClient {
         struct Static {
@@ -67,11 +68,6 @@ class TwitterClient: BDBOAuth1SessionManager {
         
     }
     func handleOpenUrl(url : NSURL) -> Void {
-//        let twitterBaseUrl = NSURL(string: "https://api.twitter.com")
-//        let twitterAppConsumerKey = "BVwcFZuRapp7oF0uL1WPkMIGi"
-//        let twitterAppConsumerSecret = "XSFo3AwoK3iS435SgUKYkCu5STtxUKBKL7koAbJeKmIvurmkn5"
-        
-        
         let twitterClient = BDBOAuth1SessionManager(
             baseURL: twitterBaseUrl,
             consumerKey: twitterAppConsumerKey,
@@ -167,6 +163,68 @@ class TwitterClient: BDBOAuth1SessionManager {
                 print("error : \(error.localizedDescription)")
                 failure(error: error)
         })
+    }
+    
+    func retweet(tweetId : String) -> Void {
+        let twitterClient = TwitterClient.sharedInstance
+        let retweetRelativeEndpoint = "1.1/statuses/retweet/\(tweetId).json"
+        twitterClient.POST(retweetRelativeEndpoint,
+                parameters: nil,
+                progress: nil,
+                success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                    print("successfully retweeted ... \(tweetId)")
+                })
+                { (request : NSURLSessionDataTask?, error : NSError) in
+                    print("[ERROR] \(error)")
+        }
+    }
+    
+    func unRetweet(tweetId : String) -> Void {
+        let twitterClient = TwitterClient.sharedInstance
+        let retweetRelativeEndpoint = "1.1/statuses/unretweet/\(tweetId).json"
+        twitterClient.POST(retweetRelativeEndpoint,
+                           parameters: nil,
+                           progress: nil,
+                           success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                            print("successfully un-retweeted ... \(tweetId)")
+            })
+        { (request : NSURLSessionDataTask?, error : NSError) in
+            print("[ERROR] \(error)")
+        }
+    }
+
+    func favorite(tweetId : String) -> Void {
+        let twitterClient = TwitterClient.sharedInstance
+//        1.1/favorites/create.json?id=759662585859874816
+        let favoriteRelativeEndpoint = "1.1/favorites/create.json"
+        var requestParameters : [String : String] = [:]
+        requestParameters["id"] = tweetId
+        twitterClient.POST(favoriteRelativeEndpoint,
+                           parameters: requestParameters,
+                           progress: nil,
+                           success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                            print("successfully favourited ... \(tweetId)")
+            })
+        { (request : NSURLSessionDataTask?, error : NSError) in
+            print("[ERROR] \(error)")
+        }
+    }
+    
+    func unfavorite(tweetId : String) -> Void {
+        let twitterClient = TwitterClient.sharedInstance
+        //        1.1/favorites/create.json?id=759662585859874816
+        let unfavoriteRelativeEndpoint = "1.1/favorites/destroy.json"
+        var requestParameters : [String : String] = [:]
+        requestParameters["id"] = tweetId
+        twitterClient.POST(unfavoriteRelativeEndpoint,
+                           parameters: requestParameters,
+                           progress: nil,
+                           success: { (request : NSURLSessionDataTask, response : AnyObject?) in
+                            print("successfully unfavorited ... \(tweetId)")
+            })
+        { (request : NSURLSessionDataTask?, error : NSError) in
+            print("[ERROR] \(error)")
+        }
     }
 
 }

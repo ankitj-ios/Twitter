@@ -10,6 +10,7 @@ import UIKit
 
 class TweetCell: UITableViewCell {
 
+    var tweet : Tweet?
     
     @IBOutlet weak var userImageView: UIImageView!
     
@@ -27,8 +28,34 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var tweetTextLabel: UILabel!
     
     @IBOutlet weak var favoriteCountLabel: UILabel!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
+    @IBAction func onReplyButtonTap(sender: AnyObject) {
+        print("reply button tapped ... ")
+        var userInfo : [String : AnyObject] = [:]
+        userInfo["tweetCell"] = self
+        print("reply button notification sent ... ")
+        NSNotificationCenter.defaultCenter().postNotificationName("ReplyButtonTapped", object: nil, userInfo: userInfo)
+    }
+    
+    @IBAction func onRetweetButtonTap(sender: AnyObject) {
+        print("retweet button tapped ... ")
+        var userInfo : [String : AnyObject] = [:]
+        userInfo["tweetCell"] = self
+        print("retweet button notification sent ... ")
+        NSNotificationCenter.defaultCenter().postNotificationName("RetweetButtonTapped", object: nil, userInfo: userInfo)
+        
+    }
+
+    @IBAction func onFavoriteButtonTap(sender: AnyObject)    {
+        print("favorite button tapped ... ")
+        var userInfo : [String : AnyObject] = [:]
+        userInfo["tweetCell"] = self
+        print("favorite button notification sent ... ")
+        NSNotificationCenter.defaultCenter().postNotificationName("FavoriteButtonTapped", object: nil, userInfo: userInfo)
+    }
 }

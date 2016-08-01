@@ -90,11 +90,17 @@
                                                     <rect key="frame" x="127" y="61" width="40" height="26"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="retweet"/>
+                                                    <connections>
+                                                        <action selector="onRetweetButtonTap:" destination="yCl-i9-tRZ" eventType="touchUpInside" id="0qD-yU-Noa"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4lu-tW-shz">
                                                     <rect key="frame" x="193" y="61" width="40" height="26"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="favorite"/>
+                                                    <connections>
+                                                        <action selector="onFavoriteButtonTap:" destination="yCl-i9-tRZ" eventType="touchUpInside" id="Ye2-Ut-Pxt"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="100" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a8e-Le-CNW">
                                                     <rect key="frame" x="171" y="69" width="14.5" height="10"/>
@@ -112,6 +118,9 @@
                                                     <rect key="frame" x="87" y="61" width="30" height="26"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <state key="normal" title="reply"/>
+                                                    <connections>
+                                                        <action selector="onReplyButtonTap:" destination="yCl-i9-tRZ" eventType="touchUpInside" id="gXf-pD-2bE"/>
+                                                    </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sIJ-vL-0TR">
                                                     <rect key="frame" x="8" y="8" width="71" height="73"/>

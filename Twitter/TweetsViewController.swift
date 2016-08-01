@@ -35,8 +35,79 @@ class TweetsViewController: UIViewController {
             }) { (error) in
             print("Error  : \(error.localizedDescription)")
         }
+        registerNotificationObservers()
     }
     
+    func registerNotificationObservers() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleReplyNotification),
+            name: "ReplyButtonTapped", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleRetweetNotification), name: "RetweetButtonTapped", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleFavoriteNotification), name: "FavoriteButtonTapped", object: nil)
+    }
+    
+    func handleReplyNotification(notification : NSNotification) {
+        let userInfo : [NSObject : AnyObject] = notification.userInfo!
+        let tweetCell = userInfo["tweetCell"] as? TweetCell
+        let tweet = tweetCell?.tweet
+        print(tweetCell?.tweetTextLabel.text)
+        print(tweet?.tweetIdString ?? "")
+    }
+    
+    func handleRetweetNotification(notification : NSNotification) {
+        let userInfo : [NSObject : AnyObject] = notification.userInfo!
+        let tweetCell = userInfo["tweetCell"] as? TweetCell
+        var indexPaths : [NSIndexPath] = []
+        indexPaths.append(tweetsTableView.indexPathForCell(tweetCell!)!)
+        let tweet = tweetCell?.tweet
+        print("retweet button notification received .... ")
+        print(tweetCell?.tweetTextLabel.text)
+        print(tweet?.tweetIdString ?? "")
+        if let tweet = tweet {
+            let isRetweeted = tweet.isRetweeted
+            if let tweetIdString = tweet.tweetIdString {
+                if isRetweeted {
+                    TwitterClient.sharedInstance.unRetweet(tweetIdString)
+                    tweet.retweetCount! -= 1
+                    tweet.isRetweeted = false
+                    tweetCell?.retweetButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
+                } else {
+                    TwitterClient.sharedInstance.retweet(tweetIdString)
+                    tweet.retweetCount! += 1
+                    tweet.isRetweeted = true
+                    tweetCell?.retweetButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+                }
+                tweetsTableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+            }
+        }
+    }
+    
+    func handleFavoriteNotification(notification : NSNotification) {
+        let userInfo : [NSObject : AnyObject] = notification.userInfo!
+        let tweetCell = userInfo["tweetCell"] as? TweetCell
+        var indexPaths : [NSIndexPath] = []
+        indexPaths.append(tweetsTableView.indexPathForCell(tweetCell!)!)
+        let tweet = tweetCell?.tweet
+        print("favorite button notification received .... ")
+        if let tweet = tweet {
+            let isFavorited = tweet.isFavorited
+            if let tweetIdString = tweet.tweetIdString {
+                print("tweetId : \(tweetIdString)")
+                if isFavorited {
+                    TwitterClient.sharedInstance.unfavorite(tweetIdString)
+                    tweet.favouriteCount! -= 1
+                    tweet.isFavorited = false
+                    tweetCell?.favoriteButton.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)
+                } else {
+                    TwitterClient.sharedInstance.favorite(tweetIdString)
+                    tweet.favouriteCount! += 1
+                    tweet.isFavorited = true
+                    tweetCell?.favoriteButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+                }
+                tweetsTableView.reloadRowsAtIndexPaths(indexPaths, withRowAnimation: .Automatic)
+            }
+        }
+    }
+
     func refreshControlAction(refreshControl : UIRefreshControl) {
         TwitterClient.sharedInstance.fetchHomeTimeline({ (tweets) in
             self.tweets = tweets
@@ -67,9 +138,20 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
     }
     
     func populateTweetCell(cell : TweetCell, tweet : Tweet) -> Void {
+        cell.tweet = tweet
         cell.tweetTextLabel.text = tweet.tweetText
         cell.retweetCountLabel.text = String(tweet.retweetCount!)
+        if tweet.isRetweeted {
+            cell.retweetButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
+        } else {
+            cell.retweetButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        }
         cell.favoriteCountLabel.text = String(tweet.favouriteCount!)
+        if tweet.isFavorited {
+            cell.favoriteButton.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)
+        } else {
+            cell.favoriteButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        }
         cell.userName.text = tweet.tweetUser?.userName
         cell.userScreenName.text = tweet.tweetUser?.userScreenName
         cell.createdAtLabel.text = "1/01/0001"
