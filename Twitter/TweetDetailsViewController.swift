@@ -14,8 +14,10 @@ class TweetDetailsViewController: UIViewController {
     
     @IBOutlet weak var userNameLabel: UILabel!
     
+    
     @IBOutlet weak var userScreenNameLable: UILabel!
     
+    @IBOutlet weak var tweetLabel: UILabel!
     @IBOutlet weak var timeLable: UILabel!
     
     @IBOutlet weak var replyButton: UIButton!
@@ -58,6 +60,8 @@ class TweetDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        userProfileImageView.layer.cornerRadius = 4
+        userProfileImageView.clipsToBounds = true
         populateData()
     }
     
@@ -72,6 +76,7 @@ class TweetDetailsViewController: UIViewController {
         }
         userNameLabel.text = tweet!.tweetUser?.userName
         userScreenNameLable.text = "@\(tweet!.tweetUser!.userScreenName!)"
+        tweetLabel.text = tweet!.tweetText
         self.retweetCountLabel.text = String(tweet!.retweetCount!)
         if tweet!.isRetweeted {
             retweetButton.setTitleColor(UIColor.greenColor(), forState: UIControlState.Normal)
