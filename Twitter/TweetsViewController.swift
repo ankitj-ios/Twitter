@@ -85,6 +85,7 @@ class TweetsViewController: UIViewController {
                 let detailsViewController = segue.destinationViewController as! TweetDetailsViewController
                 let cell = sender as! TweetCell
                 detailsViewController.tweet = cell.tweet!
+                detailsViewController.tweetCell = cell
             }
         }
     }

@@ -32,6 +32,10 @@ class TweetCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        userImageView.layer.cornerRadius = 4
+        userImageView.clipsToBounds = true
+
     }
     
     @IBAction func onReplyButtonTap(sender: AnyObject) {
