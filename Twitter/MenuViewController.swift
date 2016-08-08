@@ -20,24 +20,25 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var hamburgerViewController: HamburgerViewController!
     var viewControllers : [UIViewController] = []
     
+    let menuItems = ["Home", "Profile", "Mentions"];
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.dataSource = self
-        tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
         
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        tweetsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("TweetsViewController")
-        profileViewController = mainStoryboard.instantiateViewControllerWithIdentifier("ProfileViewController")
-        mentionsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("MentionsViewController")
+        tweetsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("TweetsNavigationController")
+        profileViewController = mainStoryboard.instantiateViewControllerWithIdentifier("ProfileNavigationController")
+        mentionsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("MentionsNavigationController")
         
         viewControllers.append(tweetsViewController)
         viewControllers.append(profileViewController)
         viewControllers.append(mentionsViewController)
         
-        tableView.reloadData()
-        
+        self.tableView.reloadData()
         
     }
     
@@ -49,20 +50,22 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // ============ Table View ==============
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        print("inside cellForRowAtIndexPath ... ")
         let menuCell = tableView.dequeueReusableCellWithIdentifier("MenuCell") as! MenuCell
-        let menuItems = ["Home", "Profile", "Mentions"];
         print(menuItems[indexPath.row])
         menuCell.menuItemLabel.text = menuItems[indexPath.row]
         return menuCell
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        print("menu items count ... \(menuItems.count)")
-        print("inside numberOfRowsInSection ... ")
-        return 3
+        print("menu items count ... \(menuItems.count)")
+        return menuItems.count
     }
     
 
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("selected ... \(menuItems[indexPath.row])")
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        hamburgerViewController.contentViewController = viewControllers[indexPath.row]
+    }
 }
 

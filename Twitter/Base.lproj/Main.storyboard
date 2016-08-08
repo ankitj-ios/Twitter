@@ -167,7 +167,7 @@
             </objects>
             <point key="canvasLocation" x="600" y="1828"/>
         </scene>
-        <!--Profile View Controller-->
+        <!--Profile-->
         <scene sceneID="sWh-1Z-SN1">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="Enb-9t-f3m" customClass="ProfileViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
@@ -180,13 +180,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="mXR-US-pJB"/>
+                    <navigationItem key="navigationItem" title="Profile" id="mXR-US-pJB"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8zK-zg-b52" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="997" y="1828"/>
         </scene>
-        <!--Mentions View Controller-->
+        <!--Mentions-->
         <scene sceneID="zJA-E5-zFn">
             <objects>
                 <viewController storyboardIdentifier="MentionsViewController" id="sri-Ij-gvF" customClass="MentionsViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
@@ -199,7 +199,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="JtZ-9B-psc"/>
+                    <navigationItem key="navigationItem" title="Mentions" id="JtZ-9B-psc"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E0s-O5-fbu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -513,7 +513,7 @@
         <!--Navigation Controller-->
         <scene sceneID="J5c-nt-KZ2">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xCV-4k-Xh5" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ProfileNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="xCV-4k-Xh5" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="l6O-EL-Seh">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -531,7 +531,7 @@
         <!--Navigation Controller-->
         <scene sceneID="MFc-Ri-hyG">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MFf-7y-1KQ" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MentionsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="MFf-7y-1KQ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="BTX-lL-0IZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

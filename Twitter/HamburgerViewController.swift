@@ -19,9 +19,37 @@ class HamburgerViewController: UIViewController {
     var orignalLeftContraint : CGFloat!
     
     var menuViewController : UIViewController! {
-        didSet {
+        didSet(oldMenuViewController) {
             view.layoutIfNeeded()
+            
+            if oldMenuViewController != nil {
+                oldMenuViewController.willMoveToParentViewController(nil)
+                oldMenuViewController.view.removeFromSuperview()
+                oldMenuViewController.didMoveToParentViewController(nil)
+            }
+            
             menuView.addSubview(menuViewController.view)
+        }
+    }
+    
+    var contentViewController : UIViewController! {
+        didSet(oldContentViewController) {
+            view.layoutIfNeeded()
+            
+            if oldContentViewController != nil {
+                oldContentViewController.willMoveToParentViewController(nil)
+                oldContentViewController.view.removeFromSuperview()
+                oldContentViewController.didMoveToParentViewController(nil)
+            }
+            
+            contentViewController.willMoveToParentViewController(self)
+            contentView.addSubview(contentViewController.view)
+            contentViewController.didMoveToParentViewController(self)
+
+            UIView.animateWithDuration(0.5) { 
+                self.contentViewLeftContraint.constant = 0
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
