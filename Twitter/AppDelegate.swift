@@ -20,10 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if User.currentUser != nil {
             //save the user
             print("There is a current user")
+//            let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
+//            let tweetsNavigationController = mainStoryBoard.instantiateViewControllerWithIdentifier("TweetsNavigationController")
+//            // to set a view controller as initial view controller programmatically
+//            window?.rootViewController = tweetsNavigationController
+            
             let mainStoryBoard = UIStoryboard(name: "Main", bundle: nil)
-            let tweetsNavigationController = mainStoryBoard.instantiateViewControllerWithIdentifier("TweetsNavigationController")
-            // to set a view controller as initial view controller programmatically
-            window?.rootViewController = tweetsNavigationController
+            let hamburgerViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("HamburgerViewController") as! HamburgerViewController
+            let menuViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MenuViewController") as! MenuViewController
+            menuViewController.hamburgerViewController = hamburgerViewController
+            hamburgerViewController.menuViewController = menuViewController
+
         } else {
             print("There is no current user")
         }
