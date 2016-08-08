@@ -43,10 +43,19 @@ class TweetsViewController: UIViewController {
             name: "ReplyButtonTapped", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleRetweetNotification), name: "RetweetButtonTapped", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleFavoriteNotification), name: "FavoriteButtonTapped", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleTweetNotification),
-            name: "TweetButtonTapped", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleTweetNotification), name: "TweetButtonTapped", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.handleImageNotification), name: "UserImageTapped", object: nil)
     }
     
+    func handleImageNotification(notification : NSNotification) {
+        let userInfo : [NSObject : AnyObject] = notification.userInfo!
+        let tweetCell = userInfo["tweetCell"] as? TweetCell
+        let tweet = tweetCell?.tweet
+        print(tweetCell?.tweetTextLabel.text)
+        print(tweet?.tweetIdString ?? "")
+        print("image tapped notification received .... ")
+        self.performSegueWithIdentifier("ImageToProfileSegue", sender: tweet)
+    }
     func handleTweetNotification(notification : NSNotification) {
         print("have to update table view with latest cell at index = 0")
         let userInfo : [NSObject : AnyObject] = notification.userInfo!
@@ -86,6 +95,11 @@ class TweetsViewController: UIViewController {
                 let cell = sender as! TweetCell
                 detailsViewController.tweet = cell.tweet!
                 detailsViewController.tweetCell = cell
+            }
+            if segueIdentifier == "ImageToProfileSegue" {
+                let profileViewController = segue.destinationViewController as! ProfileViewController
+                let tweet = sender as! Tweet
+                profileViewController.user = tweet.tweetUser
             }
         }
     }
@@ -175,6 +189,7 @@ extension TweetsViewController : UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("didselect called ...")
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     

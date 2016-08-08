@@ -30,12 +30,25 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var favoriteCountLabel: UILabel!
     
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         userImageView.layer.cornerRadius = 4
         userImageView.clipsToBounds = true
-
+        
+        self.userImageView.userInteractionEnabled = true
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapUserImage))
+        tapGestureRecognizer.delegate = self
+        self.userImageView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    func onTapUserImage() {
+        print("user image tapped ... ")
+        var userInfo : [String : AnyObject] = [:]
+        userInfo["tweetCell"] = self
+        print("user image tapped notification sent ... ")
+        NSNotificationCenter.defaultCenter().postNotificationName("UserImageTapped", object: nil, userInfo: userInfo)
     }
     
     @IBAction func onReplyButtonTap(sender: AnyObject) {

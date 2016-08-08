@@ -127,7 +127,43 @@ class TwitterClient: BDBOAuth1SessionManager {
             print("[ERROR] \(error)")
         }
     }
-    
+
+    func fetchMentionsTimelineWithParams(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> (), parameters : [String : String]) {
+        let twitterClient = TwitterClient.sharedInstance
+        let mentionsTimelineRelativeEndpoint = "1.1/statuses/mentions_timeline.json"
+        twitterClient.GET(
+            mentionsTimelineRelativeEndpoint,
+            parameters: parameters,
+            progress: nil,
+            success: { (request : NSURLSessionDataTask, response :AnyObject?) in
+                let tweetDictionaries = response as! [NSDictionary]
+                let tweets = Tweet.toTweets(tweetDictionaries)
+                success(tweets: tweets)
+            },
+            failure: { (request : NSURLSessionDataTask?, error : NSError) in
+                print("fetch user timeline with params failed ... ")
+                print("request\(request!.debugDescription), error : \(error.localizedDescription)")
+        })
+    }
+
+    func fetchUserTimelineWithParams(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> (), parameters : [String : String]) {
+        let twitterClient = TwitterClient.sharedInstance
+        let userTimelineRelativeEndpoint = "1.1/statuses/user_timeline.json"
+        twitterClient.GET(
+            userTimelineRelativeEndpoint,
+            parameters: parameters,
+            progress: nil,
+            success: { (request : NSURLSessionDataTask, response :AnyObject?) in
+                let tweetDictionaries = response as! [NSDictionary]
+                let tweets = Tweet.toTweets(tweetDictionaries)
+                success(tweets: tweets)
+            },
+            failure: { (request : NSURLSessionDataTask?, error : NSError) in
+                print("fetch user timeline with params failed ... ")
+                print("request\(request!.debugDescription), error : \(error.localizedDescription)")
+        })
+    }
+
     func fetchHomeTimelineWithParams(success : (tweets : [Tweet]) -> (), failure : (error : NSError) -> (), parameters : [String : String]) {
         let twitterClient = TwitterClient.sharedInstance
         let homeTimelineRelativeEndpoint = "1.1/statuses/home_timeline.json"

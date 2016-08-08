@@ -40,6 +40,7 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.tableView.reloadData()
         
+        hamburgerViewController.contentViewController = viewControllers[0]
     }
     
     override func didReceiveMemoryWarning() {

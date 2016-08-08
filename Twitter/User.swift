@@ -20,7 +20,9 @@ class User: NSObject {
     var followersCount  : Int
     var friendsCount : Int
     var profileImageUrl : NSURL?
+    var timelineImageUrl : NSURL?
     var createdAt : NSDate?
+    var tweetsCount : Int?
     
     var dictionary : NSDictionary
     
@@ -35,6 +37,9 @@ class User: NSObject {
         followersCount = dictionary["followers_count"] as? Int ?? 0
         friendsCount = dictionary["friends_count"] as? Int ?? 0
         profileImageUrl = NSURL(string: dictionary["profile_image_url_https"] as! String)
+        timelineImageUrl = NSURL(string: dictionary["profile_background_image_url_https"] as! String)
+        
+        tweetsCount = dictionary["statuses_count"] as? Int
     }
     
     
