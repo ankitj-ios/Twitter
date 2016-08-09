@@ -28,6 +28,9 @@ class MenuViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
+//        self.tableView.backgroundColor = UIColor.grayColor()
+        self.tableView.separatorStyle = .None
+        
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
         tweetsViewController = mainStoryboard.instantiateViewControllerWithIdentifier("TweetsNavigationController")
