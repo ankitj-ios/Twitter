@@ -28,6 +28,9 @@ class ProfileViewController: UIViewController {
         
         self.profileTweetsTableView.dataSource = self
         
+        self.profileTweetsTableView.rowHeight = UITableViewAutomaticDimension
+        self.profileTweetsTableView.estimatedRowHeight = 140
+        
         if user == nil {
             user = User.currentUser
         }
@@ -68,7 +71,7 @@ class ProfileViewController: UIViewController {
             }
         }
         userNameLabel.text = user.userName
-        userScreenNameLabel.text = user.userScreenName
+        userScreenNameLabel.text = "@\(user.userScreenName!)"
         followersCountLabel.text = String(user.followersCount)
         friendsCountLabel.text = String(user.friendsCount)
         tweetsCountLabel.text = String(user.tweetsCount)
